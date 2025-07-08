@@ -6,8 +6,15 @@ import type { PurchaseCategory } from '../../../shared/stores/checklistStore';
 
 const CATEGORIES: PurchaseCategory[] = ['가구', '가전', '소품', '정리', '식기', '렌트', '기타'];
 
+type OGData = {
+  image?: string;
+  title?: string;
+  description?: string;
+  url?: string;
+};
+
 function OGPreview({ url }: { url: string }) {
-  const [og, setOg] = useState<any>(null);
+  const [og, setOg] = useState<OGData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -75,7 +82,7 @@ export const PurchaseFormPanel: React.FC = () => {
     e.preventDefault();
     if (purchaseForm.title.trim() && purchaseForm.price) {
       if (isEditMode && selectedItem) {
-        updateItem(selectedItem.id, purchaseForm);
+        updateItem(selectedItem.id, purchaseForm, true);
       } else {
         addItem(purchaseForm);
       }
@@ -85,7 +92,7 @@ export const PurchaseFormPanel: React.FC = () => {
   const handleSave = () => {
     if (purchaseForm.title.trim() && purchaseForm.price) {
       if (isEditMode && selectedItem) {
-        updateItem(selectedItem.id, purchaseForm);
+        updateItem(selectedItem.id, purchaseForm, true);
       } else {
         addItem(purchaseForm);
       }

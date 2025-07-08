@@ -7,6 +7,8 @@ import { ScheduleDetailPanel } from './ScheduleDetailPanel';
 import { DraggableList } from '../../../shared/components/DraggableList';
 import { DraggableItem } from '../../../shared/components/DraggableItem';
 import { DropZone } from '../../../shared/components/DropZone';
+import type { ScheduleItem } from '../../../shared/stores/scheduleStore';
+import { LoadingSpinner } from '../../../shared/components/LoadingSpinner';
 
 export const ScheduleChecklist: React.FC = () => {
   const {
@@ -37,7 +39,7 @@ export const ScheduleChecklist: React.FC = () => {
     }
   }, [error, clearError]);
 
-  const handleItemClick = (item: any) => {
+  const handleItemClick = (item: ScheduleItem) => {
     selectItem(item);
     openDetailPanel();
     // 필요시 DETAIL API 호출 추가 가능
@@ -54,7 +56,9 @@ export const ScheduleChecklist: React.FC = () => {
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
         {loading ? (
-          <div className="flex items-center justify-center h-full text-gray-400">로딩 중...</div>
+          <div className="flex items-center justify-center h-full">
+            <LoadingSpinner />
+          </div>
         ) : items.length > 0 ? (
           <DraggableList onReorder={reorderItems} onMoveToCompleted={moveToCompleted} onMoveToPlanned={moveToPlanned} items={items}>
             {/* Planned Items */}

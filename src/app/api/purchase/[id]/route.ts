@@ -135,8 +135,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const data = await req.json();
     const item = await prisma.purchaseItem.update({ where: { id }, data });
     return NextResponse.json({ success: true, data: item });
-  } catch (e: any) {
-    return NextResponse.json({ success: false, error: e.message }, { status: 500 });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 

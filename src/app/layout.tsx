@@ -1,7 +1,7 @@
 import '../index.css';
 
 export const metadata = {
-  title: '∴∵∴ ୨୧ 𝘾𝙝𝙚𝙘𝙠𝙡𝙞𝙨𝙩 ୨୧ ∴∵∴',
+  title: '∴∵∴ ୨୧ 체크리스트 ୨୧ ∴∵∴',
 }
 
 export default function RootLayout({
@@ -11,6 +11,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
+      <head>
+        <title>{'∴∵∴ ୨୧ 체크리스트 ୨୧ ∴∵∴'}</title>
+      </head>
       <body className="min-h-screen bg-gradient-to-t from-blue-50 via-indigo-100 to-white">
         {children}
       </body>

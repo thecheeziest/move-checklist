@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import { useScheduleStore } from '../../../shared/stores/scheduleStore';
 import type { ScheduleItem as ScheduleItemType } from '../../../shared/stores/scheduleStore';
 
 interface ScheduleItemProps {
   item: ScheduleItemType;
+}
+
+// window 타입 확장
+interface WindowWithDragProps extends Window {
+  __dragProps?: Record<string, { attributes: HTMLAttributes<HTMLElement>; listeners: Record<string, EventListener> }>;
 }
 
 const formatDate = (date: string) => {
@@ -24,7 +29,7 @@ export const ScheduleItem: React.FC<ScheduleItemProps> = ({ item }) => {
   const { toggleItem, deleteItem, selectItem, openDetailPanel, openAddForm, updateScheduleForm } = useScheduleStore();
   
   // Get drag attributes and listeners from parent DraggableItem
-  const dragProps = (window as any).__dragProps?.[item.id];
+  const dragProps = (window as WindowWithDragProps).__dragProps?.[item.id];
 
   const handleSelect = () => {
     selectItem(item);

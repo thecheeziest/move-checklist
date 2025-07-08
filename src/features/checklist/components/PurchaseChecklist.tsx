@@ -8,6 +8,7 @@ import { DraggableList } from '../../../shared/components/DraggableList';
 import { DraggableItem } from '../../../shared/components/DraggableItem';
 import { DropZone } from '../../../shared/components/DropZone';
 import { LoadingSpinner } from '../../../shared/components/LoadingSpinner';
+import type { ChecklistItem as ChecklistItemType } from '../../../shared/stores/checklistStore';
 
 export const PurchaseChecklist: React.FC = () => {
   const {
@@ -38,7 +39,7 @@ export const PurchaseChecklist: React.FC = () => {
     }
   }, [error, clearError]);
 
-  const handleItemClick = (item: any) => {
+  const handleItemClick = (item: ChecklistItemType) => {
     selectItem(item);
     openDetailPanel();
     // 필요시 DETAIL API 호출 추가 가능

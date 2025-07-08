@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         url,
       },
     });
-  } catch (e: any) {
+  } catch {
     return NextResponse.json({ success: false, error: 'OpenGraph 데이터 파싱 실패' }, { status: 500 });
   }
 } 

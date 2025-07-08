@@ -9,7 +9,6 @@ import {
 } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
@@ -20,7 +19,7 @@ interface DraggableListProps {
   onReorder: (oldIndex: number, newIndex: number) => void;
   onMoveToCompleted?: (itemId: string) => void;
   onMoveToPlanned?: (itemId: string) => void;
-  items: any[];
+  items: { id: string }[];
 }
 
 export const DraggableList: React.FC<DraggableListProps> = ({

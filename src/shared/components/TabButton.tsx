@@ -1,8 +1,6 @@
 import React from 'react';
-import type { TabType } from '../stores/tabStore';
 
 interface TabButtonProps {
-  tab: TabType;
   isActive: boolean;
   onClick: () => void;
   children: React.ReactNode;
@@ -11,7 +9,6 @@ interface TabButtonProps {
 }
 
 export const TabButton: React.FC<TabButtonProps> = ({
-  tab,
   isActive,
   onClick,
   children,

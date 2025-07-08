@@ -4,11 +4,10 @@ import { useDroppable } from '@dnd-kit/core';
 interface DropZoneProps {
   id: string;
   children: React.ReactNode;
-  onDrop?: (itemId: string) => void;
   className?: string;
 }
 
-export const DropZone: React.FC<DropZoneProps> = ({ id, children, onDrop, className = '' }) => {
+export const DropZone: React.FC<DropZoneProps> = ({ id, children, className = '' }) => {
   const { setNodeRef, isOver } = useDroppable({
     id,
   });

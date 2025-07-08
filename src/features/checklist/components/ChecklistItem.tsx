@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import { useChecklistStore } from '../../../shared/stores/checklistStore';
 import type { ChecklistItem as ChecklistItemType } from '../../../shared/stores/checklistStore';
 
 interface ChecklistItemProps {
   item: ChecklistItemType;
+}
+
+// window 타입 확장
+interface WindowWithDragProps extends Window {
+  __dragProps?: Record<string, { attributes: HTMLAttributes<HTMLElement>; listeners: Record<string, EventListener> }>;
 }
 
 const formatPrice = (price: number) => {
@@ -42,7 +47,7 @@ export const ChecklistItem: React.FC<ChecklistItemProps> = ({ item }) => {
   const { toggleItem, deleteItem, selectItem, openDetailPanel, openAddForm, updatePurchaseForm } = useChecklistStore();
   
   // Get drag attributes and listeners from parent DraggableItem
-  const dragProps = (window as any).__dragProps?.[item.id];
+  const dragProps = (window as WindowWithDragProps).__dragProps?.[item.id];
 
   const handleSelect = () => {
     selectItem(item);

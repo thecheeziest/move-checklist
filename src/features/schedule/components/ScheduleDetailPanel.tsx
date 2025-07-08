@@ -2,7 +2,6 @@ import React from 'react';
 import { useScheduleStore } from '../../../shared/stores/scheduleStore';
 import { SlidePanel } from '../../../shared/components/SlidePanel';
 import { SlidePanelContent } from '../../../shared/components/SlidePanelContent';
-import type { ScheduleItem } from '../../../shared/stores/scheduleStore';
 
 export const ScheduleDetailPanel: React.FC = () => {
   const {

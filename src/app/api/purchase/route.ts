@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { CreatePurchaseRequest, ApiResponse, ApiListResponse, PurchaseResponse } from '@/types/api';
+import { NextResponse } from 'next/server';
+import { prisma } from '../../../lib/prisma';
 
 // GET /api/purchase - 모든 구입 항목 조회
 export async function GET() {
@@ -8,15 +7,16 @@ export async function GET() {
     const items = await prisma.purchaseItem.findMany({ orderBy: { createdAt: 'desc' } });
     
     // BigInt를 문자열로 변환하여 반환
-    const serializedItems = items.map((item: any) => ({
+    const serializedItems = items.map((item: unknown) => ({
       ...item,
-      price: item.price.toString(),
+      price: (item as { price: bigint }).price.toString(),
       purchasedDate: item.purchasedDate ? item.purchasedDate.toISOString().split('T')[0] : null,
     }));
     
     return NextResponse.json({ success: true, data: serializedItems });
-  } catch (e: any) {
-    return NextResponse.json({ success: false, error: e.message }, { status: 500 });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
         purchasedDate: item.purchasedDate ? item.purchasedDate.toISOString().split('T')[0] : null,
       } 
     }, { status: 201 });
-  } catch (e: any) {
+  } catch (e) {
     return NextResponse.json({ success: false, error: e.message }, { status: 500 });
   }
 } 

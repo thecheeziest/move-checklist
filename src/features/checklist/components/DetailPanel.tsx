@@ -2,10 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useChecklistStore } from '../../../shared/stores/checklistStore';
 import { SlidePanel } from '../../../shared/components/SlidePanel';
 import { SlidePanelContent } from '../../../shared/components/SlidePanelContent';
-import type { ChecklistItem } from '../../../shared/stores/checklistStore';
+
+type OGData = {
+  image?: string;
+  title?: string;
+  description?: string;
+  url?: string;
+};
 
 function OGPreview({ url }: { url: string }) {
-  const [og, setOg] = useState<any>(null);
+  const [og, setOg] = useState<OGData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -73,18 +79,20 @@ export const DetailPanel: React.FC = () => {
     }
   };
 
-  const formatPrice = (price: number) => {
-    return price.toLocaleString();
+  const formatPrice = (price: string | number) => {
+    const num = typeof price === 'string' ? parseInt(price.replace(/,/g, '')) : price;
+    return num.toLocaleString();
   };
 
   const getStatusText = () => {
+    if (!selectedItem) return '';
     if (selectedItem.isPurchased) {
-      return selectedItem.purchaseDate 
-        ? `구매완료 (${selectedItem.purchaseDate.toLocaleDateString('ko-KR')})`
+      return selectedItem.purchasedDate 
+        ? `구매완료 (${new Date(selectedItem.purchasedDate).toLocaleDateString('ko-KR')})`
         : '구매완료';
     } else {
-      return selectedItem.purchaseDate 
-        ? `구매예정 (${selectedItem.purchaseDate.toLocaleDateString('ko-KR')})`
+      return selectedItem.purchasedDate 
+        ? `구매예정 (${new Date(selectedItem.purchasedDate).toLocaleDateString('ko-KR')})`
         : '구매예정';
     }
   };
@@ -174,15 +182,15 @@ export const DetailPanel: React.FC = () => {
             </div>
           )}
 
-          {/* Notes */}
-          {selectedItem.notes && (
+          {/* Memo */}
+          {selectedItem.memo && (
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 비고
               </label>
               <div className="bg-gray-50 rounded-lg p-4 max-h-48 overflow-y-auto">
                 <div className="text-gray-800 whitespace-pre-wrap break-words">
-                  {selectedItem.notes}
+                  {selectedItem.memo}
                 </div>
               </div>
             </div>

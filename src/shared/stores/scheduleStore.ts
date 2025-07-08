@@ -1,12 +1,11 @@
 import { create } from 'zustand';
 import {
   fetchScheduleItems,
-  fetchScheduleItem,
   createScheduleItem,
   updateScheduleItem,
   deleteScheduleItem,
 } from '../api/schedule';
-import type { CreateScheduleRequest, UpdateScheduleRequest, ScheduleResponse } from '@/types/api';
+import type { CreateScheduleRequest, UpdateScheduleRequest } from '@/types/api';
 
 export type ScheduleStatus = '예정' | '완료';
 
@@ -83,8 +82,8 @@ export const useScheduleStore = create<ScheduleStore>((set, get) => ({
         updatedAt: new Date(item.updatedAt),
       }));
       set({ items, loading: false });
-    } catch (e: any) {
-      set({ error: e.message, loading: false });
+    } catch (e: unknown) {
+      set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', loading: false });
     }
   },
 
@@ -111,8 +110,8 @@ export const useScheduleStore = create<ScheduleStore>((set, get) => ({
       }));
       get().resetScheduleForm();
       get().closeAddForm();
-    } catch (e: any) {
-      set({ error: e.message, loading: false });
+    } catch (e: unknown) {
+      set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', loading: false });
     }
   },
 
@@ -142,15 +141,15 @@ export const useScheduleStore = create<ScheduleStore>((set, get) => ({
         selectedItem: null,
       }));
       window.alert('일정을 수정했어요 ! !');
-    } catch (e: any) {
-      if (e.message.includes('400')) {
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.includes('400')) {
         window.alert('잘못 입력햇다 햇짠아 ! ! !');
-      } else if (e.message.includes('500')) {
+      } else if (e instanceof Error && e.message.includes('500')) {
         window.alert('서버가 주것습니다 -- ;;');
       } else {
         window.alert('먼지 모를 오류라네요');
       }
-      set({ error: e.message, loading: false });
+      set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', loading: false });
     }
   },
 
@@ -162,8 +161,8 @@ export const useScheduleStore = create<ScheduleStore>((set, get) => ({
         items: state.items.filter((item) => item.id !== id),
         loading: false,
       }));
-    } catch (e: any) {
-      set({ error: e.message, loading: false });
+    } catch (e: unknown) {
+      set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', loading: false });
     }
   },
 

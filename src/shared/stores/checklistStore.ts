@@ -5,8 +5,7 @@ import {
   updatePurchaseItem, 
   deletePurchaseItem 
 } from '../api/purchase';
-import type { CreatePurchaseRequest, UpdatePurchaseRequest, PurchaseResponse } from '@/types/api';
-import { LoadingSpinner } from '../components/LoadingSpinner';
+import type { CreatePurchaseRequest, UpdatePurchaseRequest } from '@/types/api';
 
 export type PurchaseCategory = '가구' | '가전' | '소품' | '정리' | '식기' | '렌트' | '기타';
 
@@ -55,7 +54,7 @@ interface ChecklistStore {
   // Actions
   fetchItems: () => Promise<void>;
   addItem: (formData: PurchaseFormState) => Promise<void>;
-  updateItem: (id: string, item: Partial<Omit<ChecklistItem, 'id' | 'createdAt' | 'updatedAt'>>, showAlert: boolean) => Promise<void>;
+  updateItem: (id: string, item: Partial<Record<string, unknown>>, showAlert: boolean) => Promise<void>;
   deleteItem: (id: string) => Promise<void>;
   toggleItem: (id: string) => Promise<void>;
   selectItem: (item: ChecklistItem | null) => void;
@@ -103,13 +102,13 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
         updatedAt: new Date(item.updatedAt),
       }));
       set({ items, isLoading: false });
-    } catch (e: any) {
-      if (e.message.includes('500')) {
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.includes('500')) {
         window.alert('서버가 주것습니다 -- ;;');
       } else {
-        window.alert(e.message);
+        window.alert(e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다');
       }
-      set({ error: e.message, isLoading: false });
+      set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', isLoading: false });
     }
   },
 
@@ -144,23 +143,23 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
       }));
       window.alert('항목을 추가했어요 ! !');
       get().resetPurchaseForm();
-    } catch (e: any) {
-      if (e.message.includes('400')) {
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.includes('400')) {
         window.alert('잘못 입력햇다 햇짠아 ! ! !');
-      } else if (e.message.includes('500')) {
+      } else if (e instanceof Error && e.message.includes('500')) {
         window.alert('서버가 주것습니다 -- ;;');
       } else {
-        window.alert('먼지 모를 오류라네요');
+        window.alert('알 수 없는 오류가 발생했습니다');
       }
-      set({ error: e.message, isLoading: false });
+      set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', isLoading: false });
     }
   },
 
-  updateItem: async (id: string, item: Partial<Omit<ChecklistItem, 'id' | 'createdAt' | 'updatedAt'>>, showAlert: boolean = true) => {
+  updateItem: async (id: string, item: Partial<Record<string, unknown>>, showAlert: boolean = true) => {
     set({ isLoading: true, error: null });
     try {
       // undefined 값들을 제거하고 실제 값만 포함
-      const updateData: any = {};
+      const updateData: Partial<Record<string, unknown>> = {};
       if (item.category !== undefined) updateData.category = item.category;
       if (item.brand !== undefined) updateData.brand = item.brand;
       if (item.title !== undefined) updateData.title = item.title;
@@ -194,15 +193,15 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
         selectedItem: null,
       }));
       if (showAlert) window.alert('항목을 수정했어요 ! !');
-    } catch (e: any) {
-      if (e.message.includes('400')) {
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.includes('400')) {
         window.alert('잘못 입력햇다 햇짠아 ! ! !');
-      } else if (e.message.includes('500')) {
+      } else if (e instanceof Error && e.message.includes('500')) {
         window.alert('서버가 주것습니다 -- ;;');
       } else {
-        window.alert('먼지 모를 오류라네요');
+        window.alert('알 수 없는 오류가 발생했습니다');
       }
-      set({ error: e.message, isLoading: false });
+      set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', isLoading: false });
     }
   },
 
@@ -218,15 +217,15 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
         selectedItem: null,
       }));
       window.alert('항목을 삭제했어요.. 안녕 ~ ~');
-    } catch (e: any) {
-      if (e.message.includes('400')) {
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.includes('400')) {
         window.alert('잘못 입력햇다 햇짠아 ! ! !');
-      } else if (e.message.includes('500')) {
+      } else if (e instanceof Error && e.message.includes('500')) {
         window.alert('서버가 주것습니다 -- ;;');
       } else {
-        window.alert('먼지 모를 오류라네요');
+        window.alert('알 수 없는 오류가 발생했습니다');
       }
-      set({ error: e.message, isLoading: false });
+      set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', isLoading: false });
     }
   },
 
@@ -248,7 +247,7 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
     // purchasedDate는 그대로 유지 (삭제하지 않음)
 
     // isPurchased와 purchasedDate만 업데이트
-    const updateData: any = {
+    const updateData: Partial<Record<string, unknown>> = {
       isPurchased: newIsPurchased,
     };
 

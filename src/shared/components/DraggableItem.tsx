@@ -1,10 +1,16 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { HTMLAttributes } from 'react';
 
 interface DraggableItemProps {
   id: string;
   children: React.ReactNode;
+}
+
+// window 타입 확장
+interface WindowWithDragProps extends Window {
+  __dragProps?: Record<string, { attributes: HTMLAttributes<HTMLElement>; listeners: Record<string, EventListener> }>;
 }
 
 export const DraggableItem: React.FC<DraggableItemProps> = ({ id, children }) => {
@@ -25,13 +31,13 @@ export const DraggableItem: React.FC<DraggableItemProps> = ({ id, children }) =>
 
   // Store drag props globally so child components can access them
   React.useEffect(() => {
-    if (!(window as any).__dragProps) {
-      (window as any).__dragProps = {};
+    if (!(window as WindowWithDragProps).__dragProps) {
+      (window as WindowWithDragProps).__dragProps = {};
     }
-    (window as any).__dragProps[id] = { attributes, listeners };
+    (window as WindowWithDragProps).__dragProps[id] = { attributes, listeners };
     
     return () => {
-      delete (window as any).__dragProps[id];
+      delete (window as WindowWithDragProps).__dragProps[id];
     };
   }, [id, attributes, listeners]);
 
