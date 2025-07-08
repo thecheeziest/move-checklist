@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pretendard 폰트 설정 */
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Custom global styles can be added here if needed */
+
+/* Reset default margins and paddings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Prevent text selection globally */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Global text cursor rules - only for non-interactive text elements */
+p, h1, h2, h3, h4, h5, h6, label, li, td, th, strong, em, b, i, small, code, pre, blockquote {
+  cursor: default !important;
+}
+
+/* Ensure buttons and clickable elements show pointer cursor */
+button, a, [role="button"], [tabindex], .cursor-pointer, [role="tab"], 
+input[type="checkbox"], input[type="radio"], select, option,
+input[type="date"], input[type="time"] {
+  cursor: pointer !important;
+}
+
+/* Hover states for interactive elements */
+button:hover, a:hover, [role="button"]:hover, [tabindex]:hover, .cursor-pointer:hover, [role="tab"]:hover,
+input[type="checkbox"]:hover, input[type="radio"]:hover, select:hover, option:hover,
+input[type="date"]:hover, input[type="time"]:hover {
+  cursor: pointer !important;
+}
+
+/* Additional interactive elements */
+input[type="checkbox"], input[type="radio"], select, option, input[type="date"], input[type="time"] {
+  cursor: pointer !important;
+}
+
+/* Allow text selection on input fields and textareas */
+input[type="text"], input[type="email"], input[type="password"], 
+input[type="number"], input[type="url"], textarea {
+  cursor: text !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+/* Allow text selection on content areas */
+.content-selectable {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+}
+
+/* Specific text elements that should not show pointer */
+.text-gray-500, .text-gray-600, .text-gray-700, .text-gray-800, 
+.text-blue-200, .text-blue-400, .text-blue-600, .text-green-600, 
+.text-orange-600, .text-red-600, .text-white {
+  cursor: default !important;
+}
+
+/* Override for clickable text elements */
+button .text-gray-500, button .text-gray-600, button .text-gray-700, 
+button .text-gray-800, button .text-blue-200, button .text-blue-400, 
+button .text-blue-600, button .text-green-600, button .text-orange-600, 
+button .text-red-600, button .text-white,
+a .text-gray-500, a .text-gray-600, a .text-gray-700, 
+a .text-gray-800, a .text-blue-200, a .text-blue-400, 
+a .text-blue-600, a .text-green-600, a .text-orange-600, 
+a .text-red-600, a .text-white,
+[role="tab"] .text-gray-500, [role="tab"] .text-gray-600, [role="tab"] .text-gray-700, 
+[role="tab"] .text-gray-800, [role="tab"] .text-blue-200, [role="tab"] .text-blue-400, 
+[role="tab"] .text-blue-600, [role="tab"] .text-green-600, [role="tab"] .text-orange-600, 
+[role="tab"] .text-red-600, [role="tab"] .text-white {
+  cursor: pointer !important;
+}
+
+/* Hover states for text within interactive elements */
+button:hover .text-gray-500, button:hover .text-gray-600, button:hover .text-gray-700, 
+button:hover .text-gray-800, button:hover .text-blue-200, button:hover .text-blue-400, 
+button:hover .text-blue-600, button:hover .text-green-600, button:hover .text-orange-600, 
+button:hover .text-red-600, button:hover .text-white,
+a:hover .text-gray-500, a:hover .text-gray-600, a:hover .text-gray-700, 
+a:hover .text-gray-800, a:hover .text-blue-200, a:hover .text-blue-400, 
+a:hover .text-blue-600, a:hover .text-green-600, a:hover .text-orange-600, 
+a:hover .text-red-600, a:hover .text-white,
+[role="tab"]:hover .text-gray-500, [role="tab"]:hover .text-gray-600, [role="tab"]:hover .text-gray-700, 
+[role="tab"]:hover .text-gray-800, [role="tab"]:hover .text-blue-200, [role="tab"]:hover .text-blue-400, 
+[role="tab"]:hover .text-blue-600, [role="tab"]:hover .text-green-600, [role="tab"]:hover .text-orange-600, 
+[role="tab"]:hover .text-red-600, [role="tab"]:hover .text-white {
+  cursor: pointer !important;
+}
+
+/* Force pointer cursor on all text within buttons and tabs */
+button span, button div, button p, button h1, button h2, button h3, button h4, button h5, button h6,
+[role="tab"] span, [role="tab"] div, [role="tab"] p, [role="tab"] h1, [role="tab"] h2, [role="tab"] h3, [role="tab"] h4, [role="tab"] h5, [role="tab"] h6 {
+  cursor: pointer !important;
+}
+
+/* Force pointer cursor on hover for all text within buttons and tabs */
+button:hover span, button:hover div, button:hover p, button:hover h1, button:hover h2, button:hover h3, button:hover h4, button:hover h5, button:hover h6,
+[role="tab"]:hover span, [role="tab"]:hover div, [role="tab"]:hover p, [role="tab"]:hover h1, [role="tab"]:hover h2, [role="tab"]:hover h3, [role="tab"]:hover h4, [role="tab"]:hover h5, [role="tab"]:hover h6 {
+  cursor: pointer !important;
+}
+
+/* Checklist and Schedule items cursor */
+.checklist-item, .schedule-item {
+  cursor: pointer !important;
+}
+
+.checklist-item:hover, .schedule-item:hover {
+  cursor: pointer !important;
+}
+
+/* Force pointer cursor on all elements within checklist and schedule items */
+.checklist-item *, .schedule-item * {
+  cursor: pointer !important;
+}
+
+.checklist-item:hover *, .schedule-item:hover * {
+  cursor: pointer !important;
+}
+
+/* Date and time input icons cursor */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer !important;
+}
+
+/* Slide panel animation */
+.slide-panel {
+  transform: translateX(100%);
+  transition: transform 300ms ease-in-out;
+}
+
+.slide-panel.open {
+  transform: translateX(0);
+}

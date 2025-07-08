@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model PurchaseItem {
+  id           String    @id @default(cuid())
+  category     String    // 카테고리 (가구, 가전, 소품, 정리, 식기, 렌트, 기타)
+  brand        String?   // 브랜드
+  title        String    // 제목
+  price        BigInt    // 가격 (BigInt로 저장)
+  purchasedDate DateTime? // 구매일
+  isPurchased  Boolean   @default(false) // 구매 여부
+  option       String?   // 옵션
+  memo         String?   // 비고
+  url          String?   // 관련 링크 URL
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("purchase_items")
+}
+
+model ScheduleItem {
+  id          String   @id @default(cuid())
+  date        String   // 일정 날짜 (YYYY-MM-DD format)
+  time        String?  // 일정 시간 (HH:MM format)
+  status      String   @default("예정") // 상태 ('예정' 또는 '완료')
+  description String   // 일정 내용
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("schedule_items")
+}
