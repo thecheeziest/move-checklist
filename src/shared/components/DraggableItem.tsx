@@ -10,7 +10,7 @@ interface DraggableItemProps {
 
 // window 타입 확장
 interface WindowWithDragProps extends Window {
-  __dragProps?: Record<string, { attributes: HTMLAttributes<HTMLElement>; listeners: Record<string, EventListener> }>;
+  __dragProps?: Record<string, { attributes: HTMLAttributes<HTMLElement>; listeners: Record<string, unknown> }>;
 }
 
 export const DraggableItem: React.FC<DraggableItemProps> = ({ id, children }) => {
@@ -31,13 +31,18 @@ export const DraggableItem: React.FC<DraggableItemProps> = ({ id, children }) =>
 
   // Store drag props globally so child components can access them
   React.useEffect(() => {
-    if (!(window as WindowWithDragProps).__dragProps) {
-      (window as WindowWithDragProps).__dragProps = {};
+    const windowWithProps = window as WindowWithDragProps;
+    if (!windowWithProps.__dragProps) {
+      windowWithProps.__dragProps = {};
     }
-    (window as WindowWithDragProps).__dragProps[id] = { attributes, listeners };
+    if (listeners) {
+      windowWithProps.__dragProps[id] = { attributes, listeners };
+    }
     
     return () => {
-      delete (window as WindowWithDragProps).__dragProps[id];
+      if (windowWithProps.__dragProps) {
+        delete windowWithProps.__dragProps[id];
+      }
     };
   }, [id, attributes, listeners]);
 

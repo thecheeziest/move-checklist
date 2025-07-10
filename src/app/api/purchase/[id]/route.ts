@@ -73,7 +73,7 @@ export async function PUT(
     let priceBigInt: bigint;
     try {
       priceBigInt = BigInt(cleanPrice);
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { success: false, error: '가격 형식이 올바르지 않습니다.' },
         { status: 400 }

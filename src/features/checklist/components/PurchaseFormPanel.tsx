@@ -82,7 +82,7 @@ export const PurchaseFormPanel: React.FC = () => {
     e.preventDefault();
     if (purchaseForm.title.trim() && purchaseForm.price) {
       if (isEditMode && selectedItem) {
-        updateItem(selectedItem.id, purchaseForm, true);
+        updateItem(selectedItem.id, purchaseForm as unknown as Partial<Record<string, unknown>>, true);
       } else {
         addItem(purchaseForm);
       }
@@ -92,7 +92,7 @@ export const PurchaseFormPanel: React.FC = () => {
   const handleSave = () => {
     if (purchaseForm.title.trim() && purchaseForm.price) {
       if (isEditMode && selectedItem) {
-        updateItem(selectedItem.id, purchaseForm, true);
+        updateItem(selectedItem.id, purchaseForm as unknown as Partial<Record<string, unknown>>, true);
       } else {
         addItem(purchaseForm);
       }

@@ -16,7 +16,6 @@ export const TabNavigation: React.FC = () => {
         {tabs.map((tab, index) => (
           <TabButton
             key={tab.id}
-            tab={tab.id}
             isActive={activeTab === tab.id}
             onClick={() => setActiveTab(tab.id)}
             color={tab.color}

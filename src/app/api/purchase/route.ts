@@ -7,9 +7,9 @@ export async function GET() {
     const items = await prisma.purchaseItem.findMany({ orderBy: { createdAt: 'desc' } });
     
     // BigInt를 문자열로 변환하여 반환
-    const serializedItems = items.map((item: unknown) => ({
+    const serializedItems = items.map((item) => ({
       ...item,
-      price: (item as { price: bigint }).price.toString(),
+      price: item.price.toString(),
       purchasedDate: item.purchasedDate ? item.purchasedDate.toISOString().split('T')[0] : null,
     }));
     
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     let priceBigInt: bigint;
     try {
       priceBigInt = BigInt(cleanPrice);
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { success: false, error: '가격 형식이 올바르지 않습니다.' },
         { status: 400 }
@@ -76,7 +76,8 @@ export async function POST(req: Request) {
         purchasedDate: item.purchasedDate ? item.purchasedDate.toISOString().split('T')[0] : null,
       } 
     }, { status: 201 });
-  } catch (e) {
-    return NextResponse.json({ success: false, error: e.message }, { status: 500 });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 } 

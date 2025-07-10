@@ -163,7 +163,10 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
       if (item.category !== undefined) updateData.category = item.category;
       if (item.brand !== undefined) updateData.brand = item.brand;
       if (item.title !== undefined) updateData.title = item.title;
-      if (item.price !== undefined) updateData.price = item.price?.replace(/,/g, '');
+      if (item.price !== undefined) {
+        const priceValue = String(item.price);
+        updateData.price = priceValue.replace(/,/g, '');
+      }
       if (item.purchasedDate !== undefined) updateData.purchasedDate = item.purchasedDate;
       if (item.isPurchased !== undefined) updateData.isPurchased = item.isPurchased;
       if (item.option !== undefined) updateData.option = item.option;

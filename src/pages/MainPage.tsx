@@ -3,7 +3,7 @@ import React from 'react';
 import { TabNavigation } from '../widgets/TabNavigation';
 import { TabContent } from '../widgets/TabContent';
 
-export const MainPage: React.FC = () => {
+const MainPage: React.FC = () => {
   return (
     <div className="h-full bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
       {/* Header */}
@@ -29,4 +29,6 @@ export const MainPage: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};
+
+export default MainPage; 

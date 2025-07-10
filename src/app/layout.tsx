@@ -2,7 +2,7 @@ import '../index.css';
 
 export const metadata = {
   title: '∴∵∴ ୨୧ 체크리스트 ୨୧ ∴∵∴',
-}
+};
 
 export default function RootLayout({
   children,
