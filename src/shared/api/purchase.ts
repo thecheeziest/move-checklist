@@ -82,3 +82,16 @@ export const deletePurchaseItem = async (id: string): Promise<void> => {
     throw new Error(result.error || 'Failed to delete purchase item');
   }
 }; 
+
+// 순서 일괄 변경
+export const updatePurchaseOrder = async (ids: string[]): Promise<void> => {
+  const response = await fetch('/api/purchase/order', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids }),
+  });
+  const result = await response.json();
+  if (!result.success) {
+    throw new Error(result.error || 'Failed to update order');
+  }
+}; 

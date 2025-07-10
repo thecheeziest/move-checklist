@@ -24,6 +24,7 @@ model PurchaseItem {
   option       String?   // 옵션
   memo         String?   // 비고
   url          String?   // 관련 링크 URL
+  order        Int       @default(0) // 순서
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
@@ -36,6 +37,7 @@ model ScheduleItem {
   time        String?  // 일정 시간 (HH:MM format)
   status      String   @default("예정") // 상태 ('예정' 또는 '완료')
   description String   // 일정 내용
+  order       Int      @default(0) // 순서
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

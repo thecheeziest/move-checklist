@@ -4,6 +4,7 @@ import {
   createScheduleItem,
   updateScheduleItem,
   deleteScheduleItem,
+  updateScheduleOrder
 } from '../api/schedule';
 import type { CreateScheduleRequest, UpdateScheduleRequest } from '@/types/api';
 
@@ -18,6 +19,7 @@ export interface ScheduleItem {
   completed: boolean;
   createdAt: Date;
   updatedAt: Date;
+  order: number;
 }
 
 interface ScheduleFormState {
@@ -74,13 +76,15 @@ export const useScheduleStore = create<ScheduleStore>((set, get) => ({
   loadItems: async () => {
     set({ loading: true, error: null });
     try {
-      const items = (await fetchScheduleItems()).map((item) => ({
-        ...item,
-        status: item.status as ScheduleStatus,
-        completed: item.status === '완료',
-        createdAt: new Date(item.createdAt),
-        updatedAt: new Date(item.updatedAt),
-      }));
+      const items = (await fetchScheduleItems())
+        .map((item) => ({
+          ...item,
+          status: item.status as ScheduleStatus,
+          completed: item.status === '완료',
+          createdAt: new Date(item.createdAt),
+          updatedAt: new Date(item.updatedAt),
+        }))
+        .sort((a, b) => a.order - b.order); // order 기준 정렬 보장
       set({ items, loading: false });
     } catch (e: unknown) {
       set({ error: e instanceof Error ? e.message : '알 수 없는 오류가 발생했습니다', loading: false });
@@ -103,9 +107,10 @@ export const useScheduleStore = create<ScheduleStore>((set, get) => ({
         completed: newItemRaw.status === '완료',
         createdAt: new Date(newItemRaw.createdAt),
         updatedAt: new Date(newItemRaw.updatedAt),
+        order: 0,
       };
       set((state) => ({
-        items: [...state.items, newItem],
+        items: [newItem, ...state.items.map(i => ({ ...i, order: i.order + 1 }))], // 항상 맨 위로
         loading: false,
       }));
       get().resetScheduleForm();
@@ -212,11 +217,15 @@ export const useScheduleStore = create<ScheduleStore>((set, get) => ({
     set({ scheduleForm: initialScheduleForm });
   },
 
-  reorderItems: (oldIndex: number, newIndex: number) => {
+  reorderItems: async (oldIndex: number, newIndex: number) => {
     set((state) => {
       const newItems = [...state.items];
       const [removed] = newItems.splice(oldIndex, 1);
       newItems.splice(newIndex, 0, removed);
+      // order 필드 재정렬
+      newItems.forEach((item, idx) => (item.order = idx));
+      // 서버에 순서 반영
+      updateScheduleOrder(newItems.map(item => item.id));
       return { items: newItems };
     });
   },

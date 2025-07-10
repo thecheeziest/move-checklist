@@ -3,7 +3,8 @@ import {
   fetchPurchaseItems, 
   createPurchaseItem, 
   updatePurchaseItem, 
-  deletePurchaseItem 
+  deletePurchaseItem, 
+  updatePurchaseOrder // 추가
 } from '../api/purchase';
 import type { CreatePurchaseRequest, UpdatePurchaseRequest } from '@/types/api';
 
@@ -22,6 +23,7 @@ export interface ChecklistItem {
   url?: string;
   createdAt: Date;
   updatedAt: Date;
+  order: number; // 추가
 }
 
 interface PurchaseFormState {
@@ -94,13 +96,15 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
   fetchItems: async () => {
     set({ isLoading: true, error: null });
     try {
-      const items = (await fetchPurchaseItems()).map((item) => ({
-        ...item,
-        category: item.category as PurchaseCategory,
-        price: formatPrice(item.price), // 천 단위 쉼표 추가
-        createdAt: new Date(item.createdAt),
-        updatedAt: new Date(item.updatedAt),
-      }));
+      const items = (await fetchPurchaseItems())
+        .map((item) => ({
+          ...item,
+          category: item.category as PurchaseCategory,
+          price: formatPrice(item.price),
+          createdAt: new Date(item.createdAt),
+          updatedAt: new Date(item.updatedAt),
+        }))
+        .sort((a, b) => a.order - b.order); // order 기준 정렬 보장
       set({ items, isLoading: false });
     } catch (e: unknown) {
       if (e instanceof Error && e.message.includes('500')) {
@@ -119,7 +123,7 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
         category: formData.category,
         brand: formData.brand || undefined,
         title: formData.title,
-        price: formData.price.replace(/,/g, ''), // 쉼표 제거 후 전송
+        price: formData.price.replace(/,/g, ''),
         purchasedDate: formData.purchasedDate || undefined,
         isPurchased: formData.isPurchased,
         option: formData.option || undefined,
@@ -130,12 +134,12 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
       const newItem: ChecklistItem = {
         ...newItemRaw,
         category: newItemRaw.category as PurchaseCategory,
-        price: formatPrice(newItemRaw.price), // 천 단위 쉼표 추가
+        price: formatPrice(newItemRaw.price),
         createdAt: new Date(newItemRaw.createdAt),
         updatedAt: new Date(newItemRaw.updatedAt),
       };
       set((state) => ({
-        items: [...state.items, newItem],
+        items: [newItem, ...state.items.map(i => ({ ...i, order: i.order + 1 }))], // 항상 맨 위로
         isLoading: false,
         isAddFormOpen: false,
         isDetailPanelOpen: false,
@@ -293,11 +297,15 @@ export const useChecklistStore = create<ChecklistStore>((set, get) => ({
     set({ purchaseForm: initialPurchaseForm });
   },
 
-  reorderItems: (oldIndex: number, newIndex: number) => {
+  reorderItems: async (oldIndex: number, newIndex: number) => {
     set((state) => {
       const newItems = [...state.items];
       const [removed] = newItems.splice(oldIndex, 1);
       newItems.splice(newIndex, 0, removed);
+      // order 필드 재정렬
+      newItems.forEach((item, idx) => (item.order = idx));
+      // 서버에 순서 반영
+      updatePurchaseOrder(newItems.map(item => item.id));
       return { items: newItems };
     });
   },

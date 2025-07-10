@@ -19,6 +19,13 @@ function OGPreview({ url }: { url: string }) {
     if (!url) return;
     setLoading(true);
     setError('');
+    const isOwnService = url.includes('move-checklist');
+    if (isOwnService) {
+      setOg(null);
+      setLoading(false);
+      setError('');
+      return;
+    }
     const timeout = setTimeout(() => {
       fetch(`/api/og?url=${encodeURIComponent(url)}`)
         .then(res => res.json())
@@ -33,6 +40,24 @@ function OGPreview({ url }: { url: string }) {
   }, [url]);
 
   if (!url) return null;
+  const isOwnService = url.includes('move-checklist');
+  // 모바일 환경 감지
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
+  const ogWidth = isMobile ? 400 : 1200;
+  const ogHeight = isMobile ? 400 : 630;
+  if (isOwnService) {
+    const title = decodeURIComponent(url.split('/').pop() || '체크리스트');
+    return (
+      <div className="mt-2">
+        <div className="text-xs text-gray-400 mb-1">OG 이미지 미리보기</div>
+        <img
+          src={`/api/og?title=${encodeURIComponent(title)}&width=${ogWidth}&height=${ogHeight}`}
+          alt="OG 미리보기"
+          className="w-full max-w-md border rounded bg-white/80"
+        />
+      </div>
+    );
+  }
   if (loading) return <div className="text-xs text-gray-400 mt-2">미리보기 불러오는 중...</div>;
   if (error) return <div className="text-xs text-red-400 mt-2">{error}</div>;
   if (!og) return null;

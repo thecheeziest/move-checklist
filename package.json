@@ -21,6 +21,7 @@
     "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.11.1",
     "@supabase/supabase-js": "^2.50.3",
+    "@vercel/og": "^0.7.2",
     "autoprefixer": "^10.4.21",
     "cheerio": "^1.1.0",
     "classnames": "^2.5.1",

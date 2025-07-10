@@ -82,3 +82,16 @@ export const deleteScheduleItem = async (id: string): Promise<void> => {
     throw new Error(result.error || 'Failed to delete schedule item');
   }
 }; 
+
+// 순서 일괄 변경
+export const updateScheduleOrder = async (ids: string[]): Promise<void> => {
+  const response = await fetch('/api/schedule/order', {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids }),
+  });
+  const result = await response.json();
+  if (!result.success) {
+    throw new Error(result.error || 'Failed to update order');
+  }
+}; 
